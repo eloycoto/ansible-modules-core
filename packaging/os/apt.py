@@ -601,8 +601,12 @@ def main():
             install_deb(module, p['deb'], cache,
                         install_recommends=install_recommends,
                         force=force_yes, dpkg_options=p['dpkg_options'])
+        try:
+            packages = p['package'][0].split(' ')
+        except:
+            module.fail_json(
+                msg="invalid package specs: {0}".format(p['package']))
 
-        packages = p['package']
         latest = p['state'] == 'latest'
         for package in packages:
             if package.count('=') > 1:
